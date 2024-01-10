@@ -26,14 +26,16 @@ var rule = {
     // homeUrl:'/x/web-interface/search/type?search_type=video&keyword=小姐姐4K&page=1',
     homeUrl:'/x/web-interface/ranking/v2?rid=0&type=origin', // 排行 > 排行榜 > 原创
     url:'/x/web-interface/search/type?search_type=videofyfilter',
-    class_name:'专属&历史记录&推荐&经典无损音乐合集&帕梅拉&太极拳&健身&舞蹈&音乐&歌曲&MV&演唱会&白噪音&知名UP主&说案&解说&演讲&时事&探索发现&纪录片&平面设计教学&软件教程&实用教程&旅游&风景&食谱&美食&搞笑&球星&动物世界&相声小品&戏曲&儿童&小姐姐&热门&旅行探险',
-    class_url:'专属&历史记录&推荐&经典无损音乐合集&帕梅拉&太极拳&健身&舞蹈&音乐&歌曲&MV4K&演唱会4K&白噪音4K&知名UP主&说案&解说&演讲&时事&探索发现超清&纪录片超清&平面设计教学&软件教程&实用教程&旅游&风景4K&食谱&美食超清&搞笑&球星&动物世界超清&相声小品&戏曲&儿童&小姐姐4K&热门&旅行探险',
+    class_name:'专属&热门&排行榜&历史记录&推荐&经典无损音乐合集&帕梅拉&太极拳&健身&舞蹈&音乐&歌曲&MV&演唱会&白噪音&知名UP主&说案&解说&演讲&时事&探索发现&纪录片&平面设计教学&软件教程&实用教程&旅游&风景&食谱&美食&搞笑&球星&动物世界&相声小品&戏曲&儿童&小姐姐&热门&旅行探险',
+    class_url:'专属&热门&排行榜&历史记录&推荐&经典无损音乐合集&帕梅拉&太极拳&健身&舞蹈&音乐&歌曲&MV4K&演唱会4K&白噪音4K&知名UP主&说案&解说&演讲&时事&探索发现超清&纪录片超清&平面设计教学&软件教程&实用教程&旅游&风景4K&食谱&美食超清&搞笑&球星&动物世界超清&相声小品&戏曲&儿童&小姐姐4K&热门&旅行探险',
     filterable: 1,
     filter_url: '&keyword={{fl.tid}}&page=fypage&duration={{fl.duration}}&order={{fl.order}}',
     filter_def:{
         推荐:{tid:'推荐'},
         历史记录:{tid:'历史记录'},
         专属:{tid:'专属'},
+        热门:{tid:'热门'},
+        排行榜:{tid:'排行榜'},
         经典无损音乐合集:{tid:'经典无损音乐合集'},
         帕梅拉:{tid:'帕梅拉'},
         太极拳:{tid:'太极拳'},
@@ -356,6 +358,14 @@ var rule = {
                 input = HOST + '/x/web-interface/index/top/rcmd?ps=14&fresh_idx=' + MY_PAGE + '&fresh_idx_1h=' + MY_PAGE;
                 data = JSON.parse(request(input)).data;
                 vodList = data.item;
+            } else if(MY_CATE === '排行榜'){
+                input = HOST + '/x/web-interface/ranking/v2?rid=0&type=all'
+                data = JSON.parse(request(input)).data;
+                vodList = data.list;
+            } else if(MY_CATE === '热门'){
+                input = HOST + '/x/web-interface/popular?ps=10&pn=' + MY_PAGE
+                data = JSON.parse(request(input)).data;
+                vodList = data.list;
             } else if (MY_CATE === '历史记录') {
                 input = HOST + '/x/v2/history?pn=' + MY_PAGE;
                 data = JSON.parse(request(input)).data;
@@ -373,13 +383,10 @@ var rule = {
                 }
                 let play = '';
                 let danmaku = '';
-                if (MY_CATE === '推荐') {
+                if (MY_CATE === '推荐' || MY_CATE === '热门' || MY_CATE === '排行榜' || MY_CATE === '历史记录') {
                     play = ConvertNum(vod.stat.view);
                     danmaku = vod.stat.danmaku;
-                } else if (MY_CATE === '历史记录') {
-                    play = ConvertNum(vod.stat.view);
-                    danmaku = vod.stat.danmaku;
-                } else {
+                }  else {
                     play = ConvertNum(vod.play);
                     danmaku = vod.video_review;
                 }
